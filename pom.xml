@@ -14,9 +14,9 @@
                 <artifactId>liquibase-maven-plugin</artifactId>
                 <version>4.16.1</version>
                 <configuration>
-                    <propertyFile>../liquibase.properties</propertyFile>
+                    <propertyFile>./liquibase.properties</propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
-                    <outputChangeLogFile>../my_app-wrapper.xml</outputChangeLogFile>
+                    <outputChangeLogFile>./my_app-wrapper.xml</outputChangeLogFile>
                 </configuration>
                 <dependencies>
                     <dependency>
