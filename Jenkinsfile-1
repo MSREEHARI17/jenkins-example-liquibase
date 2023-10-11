@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment {
-        // Define environment variables
-        JDBC_DRIVER_URL = 'https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/2.7.4/mariadb-java-client-2.7.4.jar'
-        DB_URL = 'jdbc:mysql://192.168.0.138:3306/test_app'
+        // Define environment variables for MariaDB
+        JDBC_DRIVER_URL = 'https://downloads.mariadb.com/Connectors/java/mariadb-java-client-2.7.4.jar'
+        DB_URL = 'jdbc:mariadb://192.168.0.138:3306/test_app'
         DB_USERNAME = 'root'
         DB_PASSWORD = 'Password'
         CHANGE_LOG_FILE = 'my_app-wrapper.xml'
