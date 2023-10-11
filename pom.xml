@@ -17,9 +17,14 @@
                     <propertyFile>./liquibase.properties</propertyFile>
                     <promptOnNonLocalDatabase>false</promptOnNonLocalDatabase>
                     <outputChangeLogFile>./my_app-wrapper.xml</outputChangeLogFile>
-                    <driver>com.mysql.cj.jdbc.Driver</driver>     
+                    <driver>org.mariadb.jdbc.Driver</driver>     
                 </configuration>
                 <dependencies>
+                    <dependency>
+                        <groupId>org.mariadb.jdbc</groupId>
+                        <artifactId>mariadb-java-client</artifactId>
+                        <version>15.1</version>
+                    </dependency>
                     <dependency>
                         <groupId>mysql</groupId>
                         <artifactId>mysql-connector-java</artifactId>
