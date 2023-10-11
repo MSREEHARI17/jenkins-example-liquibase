@@ -1,12 +1,29 @@
 pipeline {
-  agent {
-    docker { image 'liquibase/liquibase:4.4.2' }
-  }
+  agent any
   stages {
-    stage('Test') {
+    stage('Status') {
       steps {
-        sh 'liquibase --version'
+        script {
+          // Download the MariaDB JDBC driver JAR file
+          sh 'wget https://downloads.mariadb.com/Connectors/java/mariadb-java-client-2.7.4.jar -O mariadb-java-client-2.7.4.jar'
+          
+          // Update Liquibase configuration to use the MariaDB driver
+          sh 'liquibase --url="jdbc:mariadb://192.168.0.138:3306/test_app" --changeLogFile=my_app-wrapper.xml --username=root --password=Password --driver=org.mariadb.jdbc.Driver status'
+        }
       }
+    }
+    stage('Update') {
+      steps {
+        script {
+          // Update Liquibase configuration to use the MariaDB driver
+          sh 'liquibase --url="jdbc:mariadb://192.168.0.138:3306/test_app" --changeLogFile=my_app-wrapper.xml --username=root --password=Password --driver=org.mariadb.jdbc.Driver update'
+        }
+      }
+    }
+  }
+  post {
+    always {
+      cleanWs()
     }
   }
 }
