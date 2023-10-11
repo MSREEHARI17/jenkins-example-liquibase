@@ -1,29 +1,36 @@
 pipeline {
-  agent any
-  stages {
-    stage('Status') {
-      steps {
-        script {
-          // Download the MariaDB JDBC driver JAR file
-          sh 'wget https://downloads.mariadb.com/Connectors/java/mariadb-java-client-2.7.4.jar -O mariadb-java-client-2.7.4.jar'
-          
-          // Update Liquibase configuration to use the MariaDB driver
-          sh 'liquibase --url="jdbc:mariadb://192.168.0.138:3306/test_app" --changeLogFile=my_app-wrapper.xml --username=root --password=Password --driver=org.mariadb.jdbc.Driver status'
+    agent any
+    environment {
+        // Define environment variables
+        JDBC_DRIVER_URL = 'https://repo1.maven.org/maven2/org/mariadb/jdbc/mariadb-java-client/2.7.4/mariadb-java-client-2.7.4.jar'
+        DB_URL = 'jdbc:mysql://192.168.0.138:3306/test_app'
+        DB_USERNAME = 'root'
+        DB_PASSWORD = 'Password'
+        CHANGE_LOG_FILE = 'my_app-wrapper.xml'
+    }
+    stages {
+        stage('Download JDBC Driver') {
+            steps {
+                script {
+                    // Download the MariaDB JDBC driver JAR file
+                    sh "wget $JDBC_DRIVER_URL -O mariadb-java-client-2.7.4.jar"
+                }
+            }
         }
-      }
-    }
-    stage('Update') {
-      steps {
-        script {
-          // Update Liquibase configuration to use the MariaDB driver
-          sh 'liquibase --url="jdbc:mariadb://192.168.0.138:3306/test_app" --changeLogFile=my_app-wrapper.xml --username=root --password=Password --driver=org.mariadb.jdbc.Driver update'
+        stage('Status') {
+            steps {
+                sh "liquibase status --url='$DB_URL' --changeLogFile='$CHANGE_LOG_FILE' --username='$DB_USERNAME' --password='$DB_PASSWORD'"
+            }
         }
-      }
+        stage('Update') {
+            steps {
+                sh "liquibase update --url='$DB_URL' --changeLogFile='$CHANGE_LOG_FILE' --username='$DB_USERNAME' --password='$DB_PASSWORD'"
+            }
+        }
     }
-  }
-  post {
-    always {
-      cleanWs()
+    post {
+        always {
+            cleanWs()
+        }
     }
-  }
 }
